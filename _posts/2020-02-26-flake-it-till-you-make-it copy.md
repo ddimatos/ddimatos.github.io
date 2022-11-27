@@ -1,10 +1,10 @@
 ---
 layout: post
-title: The developers insight to IBM z/OS Core 1.4.0
-subtitle: Everything you need to know about the latest release
-cover-img: /assets/img/update.png
-thumbnail-img: /assets/img/update-thumb.png
-share-img: /assets/img/update.png
+title: Checkout IBM z/OS Core 1.4.0
+subtitle: Whats in the latest release
+cover-img: /assets/img/code.png
+thumbnail-img: /assets/img/open_source_250_px.png
+share-img: /assets/img/code.png
 tags: [ansible, zos, ibm_zos_core]
 ---
 
