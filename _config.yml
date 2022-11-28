@@ -117,6 +117,7 @@ navbar-var-length: false
 # The keywords to associate with your website, for SEO purposes
 keywords: "ansible, ansible z, zos"
 
+remove-ads: true
 ######################################
 # --- Colours / background image --- #
 ######################################
