@@ -8,10 +8,15 @@ thumbnail-img: /assets/img/open_source_250_px.png
 # tags: [ansible, zos, ibm_zos_core]
 ---
 
-# TBD
+Ansible Core 1.4.0 has been in the making for some time and its finally being
+released into Galaxy and Automation Hub. There are too many changes to
+discuss in a single blog so I will follow up with a more technical review in
+later blogs.
 
-## TBD 2
+The most significant changes appear in how the collection manages connectivity
+over SSH, a re-architected `zos_copy` module, a new `zos_mount` module and a
+number deprecated functions and parameters. While that may already seem like quite a bit, 
 
-### TBD 3
-
-#### TBD 4
+that
+can manage mount operations for a UNIX System Services (USS) file system data set.
+While these are 
