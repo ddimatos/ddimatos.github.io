@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About me
-subtitle: The things I do :) 
+subtitle: The things I do :)
 ---
 
 ### Introduction
@@ -20,11 +20,11 @@ other offerings. The [z/OS Core collection](https://galaxy.ansible.com/ibm/ibm_z
 is our solution to enable a modern devOps experience on the mainframe.
 
 Yup, I did say mainframe; I enjoy all tech and when it really comes down to it,
-when on the mainframe I am usually in a Unix environment working on Ansible and
+when on the mainframe I am usually in a UNIX environment working on Ansible and
 the last time I checked, our collection had nearly
 [100,000](https://galaxy.ansible.com/ibm/ibm_zos_core) downloads.
 
-Initially I designed the collection and unified all the z/OS collections
+Initially, I designed the collection and unified all the z/OS collections
 under [one site](https://ibm.github.io/z_ansible_collections_doc/index.html)
 where I developed the tooling and templates that format the documentation so
 users could experience all the collections as if they were a single offering.
@@ -44,11 +44,12 @@ I am responsible for:
 - [code reviews](https://github.com/ansible-collections/ibm_zos_core/pulls?q=is%3Apr+is%3Aclosed)
 - [code](https://github.com/ansible-collections/ibm_zos_core)
 - mentoring
-- basically an engineer are heart who leads, develops and is the scrum master
+Basically I am an engineer are heart who leads, develops and is the scrum master
+for the Ansible offering on the mainframe.
 
 #### Prior
 I was not always into devOps, prior to this role I had led and designed several
-other products. I lead a team which designed the `Spark` engine integration into a
+other products. I led a team which designed the `Spark` engine integration into a
 legacy [ETL offering](https://www.ibm.com/products/information-server-for-data-integration)
 that also included parsing the UI operations and generating
 `scala` to run on `Spark` to perform the transformations.
