@@ -16,8 +16,6 @@ released into Galaxy and Automation Hub. This release brings a new module,
 file system as well as many other enhancements and some deprecations which
 we will discuss in more detail.
 
-<ins>SSH interaction</ins>
-
 Modules `zos_copy` and `zos_fetch` were enhanced to inherit options configured
 for [ansible.builtin.ssh](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ssh_connection.html)
 which is usually managed in
@@ -32,7 +30,6 @@ deprecated because it can be configured using the Ansible option
 
 ![image](https://user-images.githubusercontent.com/25803172/205228434-eb6166d9-2c8a-4a13-94e5-68374e5ab350.png)
 
-<ins>Significant redesign</ins>
 
 `zos_copy` has been redesigned to allow for data sets to be defined using option
 `dest_data_set` and which follows our precedence rules that control the order
@@ -41,7 +38,6 @@ and `zos_copy` are two of the most frequently used modules, we decided to enhanc
 ``zos_copy`` so that with few more lines of code, you can also create data sets
 to copy data into all within the playbook task. 
 
-<ins>Precedence rules</ins>
 
 The next major change is the introduction of our precedence rules which define
 how `zos_copy` will use a destination data set. For example, if `dest_data_set`
@@ -58,7 +54,6 @@ architecture.
 
 ![image](https://user-images.githubusercontent.com/25803172/205228487-eaa4b949-c2ad-4ac4-9fc5-8ef99a4a59b2.png)
 
-<ins>Enhancements</ins>
 
 Module ``zos_job_output`` was enhanced to include the completion code (CC) for
 each individual job step which is helpful in identifying which step might be
@@ -82,7 +77,6 @@ in the past only the abbreviated equivalent `T` could be used. As well,
 `zos_ping` was enhanced so it does not use the now **deprecated** `zos_ssh`
 connection plugin.
 
-<ins>Deprecations</ins>
 
 Along with the updates and enhancements there are some deprecated functions to
 note. If you were using ``zos_copy`` or ``zos_fetch`` option `sftp_port` has
@@ -98,7 +92,6 @@ it has been removed so you must remove it from any playbooks using Ansible core
 
 ![image](https://user-images.githubusercontent.com/25803172/205228545-4c513a79-1120-4770-bc02-4399613bffd5.png)
 
-<ins>Dependencies</ins>
 
 In this release, the dependencies do change in that now IBM
 [Open Enterprise SDK for Python](https://www.ibm.com/products/open-enterprise-python-zos)
