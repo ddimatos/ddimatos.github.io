@@ -2,12 +2,10 @@
 layout: post
 title: Ansible z/OS Core 1.4.0
 subtitle: Let's discuss the changes
-cover-img: /assets/img/collection-white-board
+cover-img: /assets/img/collection-white-board.jpg
 thumbnail-img: /assets/img/open_source_250_px.png
 # share-img: /assets/img/code2.png
 # tags: [ansible, zos, ibm_zos_core]
-gh-repo: ddimatos/ddimatos.github.io
-gh-badge: [follow]
 ---
 
 Ansible Core 1.4.0 has been in the making for some time and its finally being
@@ -30,6 +28,7 @@ deprecated because it can be configured using the Ansible option
 [port](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ssh_connection.html#parameter-port).
 
 
+![image](https://user-images.githubusercontent.com/25803172/205228434-eb6166d9-2c8a-4a13-94e5-68374e5ab350.png)
 
 <ins>Significant redesign</ins>
 
@@ -55,6 +54,7 @@ enhancements such as aligning `zos_copy` behaviors to the community module, but
 those will be discussed in a future blog that will dive deeper into the modules
 architecture.
 
+![image](https://user-images.githubusercontent.com/25803172/205228487-eaa4b949-c2ad-4ac4-9fc5-8ef99a4a59b2.png)
 
 <ins>Enhancements</ins>
 
@@ -94,6 +94,7 @@ been renamed to `dest_data_set`. Lastly, if you were using the `zos_ssh` plugin
 it has been removed so you must remove it from any playbooks using Ansible core
 1.4.0.
 
+![image](https://user-images.githubusercontent.com/25803172/205228545-4c513a79-1120-4770-bc02-4399613bffd5.png)
 
 <ins>Dependencies</ins>
 
