@@ -6,8 +6,6 @@ cover-img: /assets/img/collection-white-board
 thumbnail-img: /assets/img/open_source_250_px.png
 # share-img: /assets/img/code2.png
 # tags: [ansible, zos, ibm_zos_core]
-gh-repo: ddimatos/ddimatos.github.io
-gh-badge: [follow]
 ---
 
 Ansible Core 1.4.0 has been in the making for some time and its finally being
