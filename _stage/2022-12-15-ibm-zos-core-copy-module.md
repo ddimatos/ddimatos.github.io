@@ -11,52 +11,53 @@ It's time we dive into the `zos_copy` module redesign that became available with
 Ansible Core 1.4.0. At this time, the module is just over 2 years old and one of
 our most popular modules used to maintain customers production systems. You are
 probably wondering why we would decide to redesign the entire module, well there
-is no single reason but several strong reasons. As we collected feedback on how
-our customers were using the module, learning the Ansible core code base and
-seeing how our initial design had served its purpose and now it was time to
-rewrite it with serviceability in mind.
+is no single reason but several good reasons. As we collected feedback on how
+our customers were using the module, learning the Ansible core community code
+base and seeing how our initial design had served its purpose; now it was time to
+redesign it with maintainability in mind.
 
 
 The `zos_copy` module actually is comprised of two parts, one is an action plugin
 and the other part is the Ansible module. Not all modules need to have a
-corresponding plugin, but they do need to be named the same such that as Ansible
+corresponding plugin, but they do need to be named the same such that Ansible
 core can find them during an Ansible playbook execution. The purpose of the action
 plugin is to handle all the controller based operations. The controller is where
 Ansible is running, this could be your personal laptop, production server or
-Ansible Tower to name a few. The action plugin is going to manage perform controller
-operations such as ensure a local file is present to either SCP or SFTP to the managed
-z/OS node. It might look at the locale, collect some stats and send them over to
-the module during execution. A good example of its usage is copying a file on the
-controller to the managed node, it will check the systems locale, and put that information
-into a payload and share it with the module.
+Ansible Tower to name a few. The action plugin is going to perform controller
+operations such as ensuring a local file is present to either SCP or SFTP it to
+the managed z/OS node. It might look at the locale, collect some stats and send
+them over to the module during execution. A good example of its usage is copying
+a file on the controller to the managed node, it will check the systems locale,
+and put that information into a payload and share it with the module.
 
 <ins>SSH interaction</ins>
 
-The modules underlying transport is SFTP and this was originally managed by
-spawning a process but soon we saw that the isolated spawned process had no way
-of obtaining Ansible's configurations and in some instances you might be
-prompted to enter your SSH users password if you were not using SSH passwordless
-authentication. We resolved this by leveraging the Ansible community ssh
-connection instance and passing that along to our module. In doing so, now our module can
-see any options you configure in Ansible, such as
+The modules underlying transport used is SFTP and this was originally done by
+spawning a process and initializing SFTP with Pythons subprocess. Soon enough we
+witnessed that the isolated spawned process had no way of obtaining Ansible's
+configurations and in some instances you might be prompted to enter your SSH
+password if you were not using SSH passwordless authentication. I resolved this
+by leveraging the Ansible SSH connection instance and passing that along to our
+module. In doing so, now our module can see any options you configure in Ansible, such as
 [port](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ssh_connection.html#parameter-port)
-which is also why we deprecated the option `sftp_port`. While this sounded like a great idea, we also
-realized Ansible could be configured to use SCP as its transport protocol which would
-disable our module, so now we perform some analysis and if needed we toggle the
-transport modes and log this which can be seen when you run a playbook with verbosity.
+which is also why we deprecated the option `sftp_port`. While using the Ansible
+SSH was a great idea, I realized Ansible could be configured to use SCP as
+its transport protocol which would disable our modules SFTP and error. Now I
+perform some analysis and if needed, we toggle the transport modes and log this
+which can be seen when you run a playbook with verbosity.
 
 <img width="906" alt="image" src="https://user-images.githubusercontent.com/25803172/205431471-bc733161-66a6-4d88-9931-13bc0b425e5c.png">
 
-<ins>SSH interaction</ins>
+<ins>Updated interface</ins>
 
 The next update was the expanded interface to allow for the module to create
 data sets to copy data into all from within the same module. You might be asking
-why we added the data set creation when you can use the zos_data_set module to perform
-the operation. There are a couple of reasons; the first is to simplify playbooks, you could
-even say its the same reason why commands `tar` and `gzip` exist yet you can
-`tar` alone to compress. The second reason is performance, its one lest task and
-interaction that needs to take place. Lastly, is that it aligns with our data set
-precedence rules which we will talk more about later.
+why we added the data set creation when you can use the `zos_data_set` module to
+perform the operation. There are a couple of reasons; the first is to simplify
+playbooks, you could even say its the same reason why commands `tar` and `gzip`
+exist yet you can `tar` to archive and compres. The second reason is performance,
+its one less task and interaction that needs to take place. Lastly, is that it
+aligns with our data set precedence rules which we will talk more about later.
 
 Lets have a look at how this simplifies playbooks. In this snippet we are copying
 a UNIX file into a sequential data set using the enhanced interface.
@@ -100,79 +101,86 @@ Now lets have a look at how to do this using both `zos_copy` and `zos_data_set`.
       volumes: "222222"
 ```
 
+Not only is it condensed, if you are registering variables to later extract and
+validate output, you only need to register one variable.
+
 <ins>Precedence rules</ins>
 
 Precedence rules is a concept we introduced which defines the order destination
-data will be written to. Since the redesign, there is more than one way to define
+data will be written. The redesign introduced more more than one way to define
 the destination data set and thus we decided on a logical ordering which we will
 explain in more detail.
 
-With the introduction of `zos_data_set` you can create a data set with very specific
-options where the **name** will come from the option `dest`. It is
-possible the user who configures the module wants to have `zos_copy` create the
-data set and accidentally sets `dest` to a data set which exists and is empty where
-they had intended really to use `dest` to instruct the module to create that
-data set. So here we have a bit of a complex issue, we have `dest` pointing at
+With the introduction of `zos_data_set` you can create a data set with very
+specific options where the data set **name** will come from the option `dest`.
+It is possible that the user who configured the module wanted to have `zos_copy`
+create the data set and accidentally configured `dest` to point at an empty
+data set when they really just wanted to use `dest` to set the data set name for
+when the data set is created.
+
+So here we have a bit of a complex issue, we have `dest` pointing at
 and existing data set, the data set is empty and also the attributes for
-`zos_data_set` have been set, so what do we do? Do we use the empty data set, do
+`zos_data_set` have been set, so what do we do? Do we use the empty data set? Do
 we check that the empty data set has adequate space before using it or do we
 create a new data set using the provided attributes? This is why we have
-precedence rules so lets have a look at what that flow is going to look like.
+precedence rules, they help us answer these questions, so lets look at what that
+flow is going to look like.
 
 Any time option `zos_data_set` is configured, we consider this a conscious
-action, there is no room for error, if you have set the attributes we interpret
-that as the action you want to occur. After all, you went to the trouble to
-populate a number of attributes, this is why this action takes precedence over
-all others.
+action, if you have set the attributes we interpret that as the action you want
+to occur. After all, you went to the trouble to configure a number of attributes,
+this is why this action takes precedence over all others.
 
 Continuing with a similar example, lets say that you did not specify `zos_data_set`
-and `dest` is an empty data set. Well in this case we are going to size the
-data in `src` to make sure that the empty `dest` can contain the data, if there
-is not enough space then we move to our next precedent rule. Since we now know
-that the `dest` does not have enough space, we need a way to create a `dest` and
-the logical choice is that we use the `src` as the model. We read all the `src`
-attributes and use them to create a new `dest` data set and copy the contents
-into it.
+and `dest` is an empty data set. Well in this case we are going review the size
+of the data in `src` to ensure that the empty `dest` can contain the data, if there
+is not enough space then we move to our next precedent rule. Assuming we determine
+that the empty data set does not have enough space, we need a way to create
+a data set and the logical choice is that we use the `src` data set as the model.
+We will read all the `src` attributes and use them to create a new `dest`
+data set and copy the contents into it.
 
-What if the `src` is a UNIX file, you don't have any data set attributes to
-read. Well, we actually do have some attributes just not data set attributes. We
-use the `src` UNIX file to obtain the data size and if its not BINARY we read the
-`src` data to determine the longest record length (LRECL) and take some liberties
-and create a physical sequential (ps) with a Fixed Block (FB) record format.
+What if the `src` is a Unix file, there are not going to be any data set
+attributes to read. Well, we actually do have some attributes just not data set
+attributes. We will use the `src` Unix file to compute the size of the data and
+if its not binary source, we read the Unix to determine the longest record
+length (LRECL) and then create a physical sequential (ps) with a
+Fixed Block (FB) record format.
 
-For the remaining destinations data set types such as VSAM or UNIX files, no
+For the remaining destination data set types such as VSAM or UNIX files, no
 new rules apply, those interactions remain the same.
 
 <img width="827" alt="image" src="https://user-images.githubusercontent.com/25803172/205479351-e70201b9-b7d3-41a1-81c5-da1a5ea7df9e.png">
 
-Its worth note that the option `force` was enhanced that when the `dest`
+Its worth noting that the option `force` was enhanced so that when the `dest`
 is not empty, the `dest` will be deleted and recreated using the `src` as the
-model. This is because there is no point on assuming the `dest` capacity
-was enough for the `src`, hence it makes sense to use the `src` as the model. 
+model. This is done this way because there is no point on assuming the `dest`
+capacity is enough for the data, hence it makes sense to use the `src` as the
+model.
 
 
 <ins>Community alignment</ins>
 
 Over time, module implementations can diverge in behavior in comparison to
-community modules, in this case `ansible.builtin.copy`. We always strive to retain
-the original interface and behavior, in some case we can and other
-cases our module behaves differently because our platform is different.
+community modules, in this case the community module is `ansible.builtin.copy`.
+We always try to model the community interface and behavior, in some cases we
+can do so but because z/OS is quite different, sometimes we have to define our
+own modules behavior.
 
-To align with the community module, `zos_copy` was enhanced to create a parent
-directory when it might not exist in the path. For example, if the `dest` path
-was `/top-level/files/file.txt` and `files` in the path did not exist the module would
-exit without completing the copy. Now the module will create `files` and even
-`top-level` if it did not exist.
+To align with the community module, `zos_copy` was enhanced to create the parent
+directory when it does not exist in the path. For example, if the `dest` path
+was `/top-level/files/file.txt` and `files` in the path did not exist the module
+would exit, now the module will create `files` and even `top-level` directories.
 
-When permission bits are set (mode), `zos_copy` now supports setting mode for
-both directories and files. A directory copy is configured by not having a
-trailing forward slash (`/`) in the `src`, for example `/new/files` would copy
-the directory `files` to the managed node. Where , `/new/files/` would copy the
-contents to the managed node. If the `src` is a directory being copied and mode
-is configured, there could exist files in the `dest` and to prevent mode from
-altering all the exiting `dest` files, the module will inspect all the files
-in the `src` and their permissions to ensure only those files mode are updated
-and not any existing `dest` files.
+When permission bits are set using mode, `zos_copy` can not support mode for
+both directories and files. A directory copy is done by **not** having a
+trailing forward slash (`/`) in the `src`, for example when `src` = `/new/files`
+is a directory copy and would copy `files` to the managed node. Where , `/new/files/`
+would copy the contents to the managed node. If the `src` is a directory being
+copied and mode is configured, there could exist files in the `dest` and to
+prevent mode from altering all the exiting `dest` file permissions, the module
+will scan all the files in the `src` and note the permissions to ensure only
+those files mode are updated and not any existing `dest` files.
 
 For example, this task will copy the entire directory `some-dir` to
 `/u/omvsadm/some-dir` where the directory will be given permissions 644 and
@@ -188,7 +196,7 @@ set to group admin and owner omvsadm.
     owner: omvsadm
 ```
 
-For example, this task will copy the directory contents in `some-dir` to
+For example, this task will copy the directory **contents** in `some-dir` to
 `/u/omvsadm` where the contents will be given permissions 644 and
 set to group admin and owner omvsadm. Notice the trailing forward slash `/` that
 differentiates this task from the prior.
@@ -208,24 +216,26 @@ differentiates this task from the prior.
 In the beginning of the blog we noted how the original design had served its
 purpose and taking all we learned we decided to redesign the module such that
 we can maintain the modules complexity with ease, accuracy and success. Code
-should always be well organized, logically isolating, easy to maintain and easy
+should always be well organized, logically isolated, easy to maintain and easy
 to enhance.
 
 The `zos_copy` module has a number of copy handlers who's function is to handle
 copying data from one type of source to another. For example, we might have a
 `pds_to_pdse` or a `uss_to_ps` copy handler, under the new design the copy
-handlers have only one purpose, to perform only the copy operation. In the prior
-design, the copy handlers were being given the responsibility to decide if the
-dest is the right type, adequate in size, exits and even the responsibility to
-create the destination. To main this type of logic in each copy handler, it
-became complex and now the copy handlers only task is to copy. Recall the
-precedence rules, these rules helped in creating a common contract for the entire
-module such that no copy handler ever would concern itself on if the destination
-is the right type, size etc. Now the decision is made early on in the code on
-whether the destination is adequate and if not, the same code silo will create
+handlers have only one purpose, to perform only the copy operation.
+
+In the prior design, the copy handlers were given the responsibility to decide if
+the dest is the right type, adequate in size, exits and even the responsibility to
+create the destination. To maintain this type of logic in each copy handler, it
+became complex and redundant. Now the copy handlers only task is to copy data.
+
+Recall the precedence rules, these rules help in creating a contract for the entire
+module such that no copy handler will concern itself on if the destination
+is the right type, size etc. Now the decision is made early in the code flow on
+whether the destination is adequate and if not, the same code flow will create
 the destination thus alleviating the copy handlers responsibility.
 
 As you can see, we are constantly reinventing, improving and changing both
-the modules outward facing capabilities but internal architecture. We are
-continuously expanding our pipelines with linters, scanners, profilers and always
+the modules outward facing capabilities and architecture. We are continuously
+expanding our pipelines with linters, scanners, profilers and are always
 looking to improve and expand our collection.
