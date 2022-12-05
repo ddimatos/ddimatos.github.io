@@ -3,8 +3,8 @@ layout: post
 title: Ansible z/OS Core 1.4.0
 subtitle: Let's discuss the changes
 thumbnail-img: /assets/img/open_source_250_px.png
-# share-img: /assets/img/code2.png
-# tags: [ansible, zos, ibm_zos_core]
+share-img: /assets/img/code2.png
+tags: [ansible, zos, ibm_zos_core]
 ---
 
 Ansible Core 1.4.0 has been in the making for some time and its finally being
@@ -35,7 +35,7 @@ deprecated because it can be configured using the Ansible option
 `dest_data_set` and which follows our precedence rules that control the order
 in which the destination data set is written to. Because `zos_data_set`
 and `zos_copy` are two of the most frequently used modules, we decided to enhance
-``zos_copy`` so that with few more lines of code, you can also create data sets
+`zos_copy` so that with few more lines of code, you can also create data sets
 to copy data into all within the playbook task. 
 
 <ins>Precedence rules</ins>
