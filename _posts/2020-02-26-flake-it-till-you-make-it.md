@@ -1,11 +1,10 @@
 ---
 layout: post
-title: Flake it till you make it
-subtitle: Excerpt from Soulshaping by Jeff Brown
-cover-img: /assets/img/path.jpg
-thumbnail-img: /assets/img/thumb.png
-share-img: /assets/img/path.jpg
-tags: [books, test]
+title: Ansible z/OS Core 1.4.0
+subtitle: Let's discuss the changes
+thumbnail-img: /assets/img/open_source_250_px.png
+# share-img: /assets/img/code2.png
+# tags: [ansible, zos, ibm_zos_core]
 ---
 
 Ansible Core 1.4.0 has been in the making for some time and its finally being
