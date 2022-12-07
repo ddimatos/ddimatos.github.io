@@ -5,6 +5,7 @@ subtitle: The things I do :)
 ---
 
 ### Introduction
+IBM z/OS Ansible Core Senior Technical Lead, IBM
 My name is Demetrios Dimatos, I have been an engineer for over 15 years.
 Although I have a passion for engineering, I enjoy working in my shop where you
 might find me restoring furniture, installing flooring, plumbing and even
@@ -13,7 +14,7 @@ gardening. I enjoy being outdoors riding my bike and hiking.
 ### Professional Experience
 
 #### Current
-Currently I work for IBM where I am leading the
+Currently I work for IBM where I am the Ansible Core Senior Technical Lead, leading the
 [Ansible z/OS Core](https://github.com/ansible-collections/ibm_zos_core) collection and
 influencing [z/OS Open Automation Utilities](https://www.ibm.com/docs/en/zoau) and
 other offerings. The [z/OS Core collection](https://galaxy.ansible.com/ibm/ibm_zos_core)
@@ -43,7 +44,8 @@ I am responsible for:
 - [planning, creating issues and sizing](https://github.com/orgs/ansible-collections/projects/10)
 - [code reviews](https://github.com/ansible-collections/ibm_zos_core/pulls?q=is%3Apr+is%3Aclosed)
 - [code](https://github.com/ansible-collections/ibm_zos_core)
-- mentoring
+- mentoring  
+
 Basically I am an engineer are heart who leads, develops and is the scrum master
 for the Ansible offering on the mainframe.
 
