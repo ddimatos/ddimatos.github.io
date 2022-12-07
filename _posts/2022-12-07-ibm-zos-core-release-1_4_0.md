@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Navigating our open source collection
-subtitle: Overview of how we develop in the open
+title: Ansible z/OS Core 1.4.0
+subtitle: Let's discuss the changes
 thumbnail-img: /assets/img/open_source_250_px.png
 # share-img: /assets/img/code2.png
 # tags: [ansible, zos, ibm_zos_core]
@@ -32,8 +32,8 @@ deprecated because it can be configured using the Ansible option
 <ins>Significant redesign</ins>
 
 `zos_copy` has been redesigned to allow for data sets to be defined using option
-`dest_data_set` and which follows our precedence rules that control the order
-in which the destination data set is written. Since `zos_data_set`
+`dest_data_set` which follows our precedence rules that control the order in
+which the destination data is written. Since `zos_data_set`
 and `zos_copy` are two of the most frequently used modules, we decided to enhance
 ``zos_copy`` so that with few more lines of code, you can also create data sets
 to copy data from within the `zos_copy` module.
@@ -41,7 +41,7 @@ to copy data from within the `zos_copy` module.
 <ins>Precedence rules</ins>
 
 The next major change is the introduction of our precedence rules which define
-how `zos_copy` will use a destination data set. For example, if `dest_data_set`
+how `zos_copy` will write to a destination. For example, if `dest_data_set`
 is defined, it takes precedence over an empty data set because a conscious effort
 was made to set the option values. If the destination data set is empty, it will
 be used with the expectation the attributes support the copy. Lastly, if no
@@ -74,7 +74,7 @@ to return a proper response. For example, if the JCL contained a syntax error,
 the module will be looking for keywords such as `JCL ERROR` to properly fail and
 deliver an appropriate message.
 
-``zos_operator`` was enhanced to allow using the MVS operator SET command where
+``zos_operator`` was enhanced to allow using the MVS operator `SET` command where
 in the past only the abbreviated equivalent `T` could be used. As well,
 `zos_ping` was enhanced so it does not use the now **deprecated** `zos_ssh`
 connection plugin.
@@ -104,8 +104,8 @@ Python level and IBM Z Open Automation Utilities remains the same with version
 [1.1.x](https://www.ibm.com/docs/en/zoau/1.1.x).
 
 In closing, there are many more changes that were not discussed, thus I encourage
-you to review the release notes, changelog and updated documentation. You can find the
-updated collection on Automation Hub, Galaxy and GitHub.
+you to review the [release notes](https://ibm.github.io/z_ansible_collections_doc/ibm_zos_core/docs/source/release_notes.html#version-1-4-0), [changelog](https://github.com/ansible-collections/ibm_zos_core/blob/v1.4.0/CHANGELOG.rst) and updated [documentation](https://ibm.github.io/z_ansible_collections_doc/index.html). You can find the
+updated collection on [Automation Hub](https://www.ansible.com/products/automation-hub), [Galaxy](https://galaxy.ansible.com/ibm/ibm_zos_core) and [GitHub](https://github.com/ansible-collections/ibm_zos_core/releases/tag/v1.4.0).
 
 
 https://ibm.github.io/z_ansible_collections_doc/index.html

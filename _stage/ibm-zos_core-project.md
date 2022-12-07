@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Ansible z/OS Core 1.4.0
-subtitle: Let's discuss the changes
-thumbnail-img: /assets/img/open_source_250_px.png
+title: Navigating our open source collection
+subtitle: Overview of how we develop in the open
+thumbnail-img: /assets/img/magnifying_glass_250_px
 # share-img: /assets/img/code2.png
 # tags: [ansible, zos, ibm_zos_core]
 ---
