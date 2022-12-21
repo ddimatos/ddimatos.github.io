@@ -5,7 +5,6 @@ subtitle: The things I do :)
 ---
 
 ### Introduction
-IBM z/OS Ansible Core Senior Technical Lead, IBM
 My name is Demetrios Dimatos, I have been an engineer for over 15 years.
 Although I have a passion for engineering, I enjoy working in my shop where you
 might find me restoring furniture, installing flooring, plumbing and even
@@ -35,7 +34,7 @@ playbooks they could run thus I came up with the
 where we offer simple to advanced playbooks.
 
 As a lead, I always try to maintain 30% - 40% non-blocking development, somehow
-it always ends up being more but my philosophy has always been to never ask
+it always ends up being more but my belief has always been to never to ask
 anything of anyone I won't do.
 
 I am responsible for:

@@ -104,8 +104,10 @@ Python level and IBM Z Open Automation Utilities remains the same with version
 [1.1.x](https://www.ibm.com/docs/en/zoau/1.1.x).
 
 In closing, there are many more changes that were not discussed, thus I encourage
-you to review the [release notes](https://ibm.github.io/z_ansible_collections_doc/ibm_zos_core/docs/source/release_notes.html#version-1-4-0), [changelog](https://github.com/ansible-collections/ibm_zos_core/blob/v1.4.0/CHANGELOG.rst) and updated [documentation](https://ibm.github.io/z_ansible_collections_doc/index.html). You can find the
-updated collection on [Automation Hub](https://www.ansible.com/products/automation-hub), [Galaxy](https://galaxy.ansible.com/ibm/ibm_zos_core) and [GitHub](https://github.com/ansible-collections/ibm_zos_core/releases/tag/v1.4.0).
+you to review the [release notes](https://ibm.github.io/z_ansible_collections_doc/ibm_zos_core/docs/source/release_notes.html#version-1-4-0), [changelog](https://github.com/ansible-collections/ibm_zos_core/blob/v1.4.0/CHANGELOG.rst) and updated [documentation](https://ibm.github.io/z_ansible_collections_doc/index.html).
 
-
-https://ibm.github.io/z_ansible_collections_doc/index.html
+Resources
+[IBM Ansible Core Version 1.4.0 on Galaxy](https://galaxy.ansible.com/ibm/ibm_zos_core)
+[IBM Ansible Core Collection Repository on GitHub](https://github.com/ansible-collections/ibm_zos_core)
+[IBM Ansible Core Collection on Automation Hub](https://console.redhat.com/ansible/automation-hub/repo/published/ibm/ibm_zos_core)
+[Red Hat® Ansible Certified Content for IBM Z documentation](https://ibm.github.io/z_ansible_collections_doc/index.html)
